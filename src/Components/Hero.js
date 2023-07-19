@@ -4,6 +4,8 @@ import './Components.css';
 import heroImage from '../images/portraitHero.jpg';
 import {Slider} from '@mui/material';
 import NumberSpinner from './NumberSpinner';
+import Section from './Section';
+import LargeCard from './LargeCard';
 
 const Hero = () => {
 	const [homeSize, setHomeSize] = useState(0);
@@ -18,11 +20,11 @@ const Hero = () => {
 	};
 
 	return (
-		<div className='container my-5'>
+		<div className='container my-2 my-md-5'>
 			<div className='row justify-content-center align-items-center'>
-				<div className='col-md-8 col-lg-6 text-center'>
+				<div className='col-md-8 col-lg-6 text-center py-5 py-lg-0'>
 					<div className='hero-text mx-5'>
-						<h1 className='fs-1'>Get the right bid.</h1>
+						<h1 className='fs-1'>Scam-proof your bid.</h1>
 						<h1 className='fs-1' style={{color: '#3E5C8D'}}>
 							<strong>You could be saving</strong>
 						</h1>
@@ -63,16 +65,8 @@ const Hero = () => {
 					</div>
 				</div>
 			</div>
-			<div className='row d-lg-none'>
-				<div className='col-12 text-center' style={{margin: '20px 0'}}>
-					<img
-						src={heroImage}
-						alt='Hero'
-						className='image-hero'
-						style={{borderRadius: '16px', width: '100%', height: 'auto'}}
-					/>
-				</div>
-			</div>
+			<Section />
+			<LargeCard />
 		</div>
 	);
 };

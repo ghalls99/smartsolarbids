@@ -28,7 +28,7 @@ const Navbar = () => {
 		<nav
 			className={`navbar navbar-expand-md navbar-light sticky-top${
 				scrolled ? ' scrolled' : ''
-			}`}>
+			} bg-white shadow-sm`}>
 			<div className='container'>
 				<a className='navbar-brand' href='#'>
 					<img src={logo} alt='Logo' className='logo' width={50} />
@@ -63,9 +63,7 @@ const Navbar = () => {
 							</a>
 						</li>
 						<li className='nav-item p-4'>
-							<a className='nav-link' href='#'>
-								Contact
-							</a>
+							<button className='btn btn-primary'>Get a Bid</button>
 						</li>
 					</ul>
 				</div>
