@@ -4,8 +4,6 @@ import './Components.css';
 import heroImage from '../images/portraitHero.jpg';
 import {Slider} from '@mui/material';
 import NumberSpinner from './NumberSpinner';
-import Section from './Section';
-import LargeCard from './LargeCard';
 
 const Hero = () => {
 	const [homeSize, setHomeSize] = useState(0);
@@ -65,8 +63,6 @@ const Hero = () => {
 					</div>
 				</div>
 			</div>
-			<Section />
-			<LargeCard />
 		</div>
 	);
 };
