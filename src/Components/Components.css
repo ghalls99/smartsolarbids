@@ -1,0 +1,22 @@
+@media (min-width: 576px) {
+	.hero-container {
+		display: flex;
+	}
+	.hero-text {
+		text-align: center;
+	}
+
+	.hero-text h1 {
+		font-size: 32px;
+	}
+
+	.hero-text p {
+		font-size: 60px;
+		margin: 20px 0;
+	}
+
+	.hero-image img {
+		width: 300px;
+		height: 360px;
+	}
+}
