@@ -4,17 +4,28 @@ import './Components.css';
 import heroImage from '../images/portraitHero.jpg';
 import {Slider} from '@mui/material';
 import NumberSpinner from './NumberSpinner';
+import PopupForm from './PopupForm';
 
 const Hero = () => {
 	const [homeSize, setHomeSize] = useState(0);
 	const [disabled, setIsDisabled] = useState(true);
 	const [previousHomeSize, setPreviousHomeSize] = useState(0);
+	const [showPopup, setShowPopup] = useState(false);
 
 	const handleSliderValue = (value) => {
 		console.log(value);
 		setPreviousHomeSize(homeSize);
 		setHomeSize(value);
 		setIsDisabled(false);
+	};
+
+	const openPopup = () => {
+		console.log(true);
+		setShowPopup(true);
+	};
+
+	const closePopup = () => {
+		setShowPopup(false);
 	};
 
 	return (
@@ -24,7 +35,7 @@ const Hero = () => {
 					<div className='hero-text mx-5'>
 						<h1 className='fs-1'>Scam-proof your bid.</h1>
 						<h1 className='fs-1' style={{color: '#3E5C8D'}}>
-							<strong>You could be saving</strong>
+							<strong>You could save</strong>
 						</h1>
 						<p className='display-3'>
 							<strong>
@@ -46,9 +57,12 @@ const Hero = () => {
 							width='50%'
 							onChangeCommitted={(event, value) => handleSliderValue(value)}
 						/>
-						<p className='fs-6'>Upload your bid to see what you qualify for</p>
-						<button type='button' className='btn btn-primary'>
-							Upload Your Bid
+						<p className='fs-6'>Send your bid to see what you can save</p>
+						<button
+							type='button'
+							className='btn btn-primary'
+							onClick={openPopup}>
+							Send Your Bid
 						</button>
 					</div>
 				</div>
@@ -63,6 +77,7 @@ const Hero = () => {
 					</div>
 				</div>
 			</div>
+			<PopupForm showPopup={showPopup} closePopup={closePopup} />
 		</div>
 	);
 };

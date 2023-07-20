@@ -9,11 +9,10 @@ const LargeCard = () => {
 			<div className='row'>
 				<div className='col-lg-6'>
 					<div className='mx-md-5 my-5'>
-						<h2 className='text-start'>Still Have Questions?</h2>
+						<h2 className='text-start'>Don't have a bid?</h2>
 						<p className='text-start'>
-							Talk to one of our specialists to help resolve any additional
-							questions you may have, and with the full knowledge that we'll
-							help you to get the best bid possible.
+							Take a short quiz to help get you the best bid possible, tailored
+							specifically to you, and to your home.
 						</p>
 						<button className='btn btn-primary d-flex justify-content-start'>
 							Take the Quiz

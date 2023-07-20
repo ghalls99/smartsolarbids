@@ -53,16 +53,6 @@ const Navbar = () => {
 							</a>
 						</li>
 						<li className='nav-item p-4'>
-							<a className='nav-link' href='#'>
-								About
-							</a>
-						</li>
-						<li className='nav-item p-4'>
-							<a className='nav-link' href='#'>
-								Services
-							</a>
-						</li>
-						<li className='nav-item p-4'>
 							<button className='btn btn-primary'>Get a Bid</button>
 						</li>
 					</ul>
