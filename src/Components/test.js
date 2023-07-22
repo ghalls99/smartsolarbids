@@ -3,16 +3,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './Components.css'; // Import a separate CSS file for styling the popup form
 import {Close} from '@mui/icons-material';
 import axios from 'axios';
-import {CircularProgress} from '@mui/material';
 
-const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
+const PopupForm = async ({showPopup, closePopup}) => {
 	const inputFile = useRef(null);
 	const [inputFields, setInputFields] = useState({});
-	const [isLoading, setIsLoading] = useState(false);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		setIsLoading(true);
 
 		// Access the file input element using the ref
 		const selectedFile = inputFile.current.files[0];
@@ -36,48 +33,13 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
 			// Now you can send the formData object with the file via API
 			// For example:
 			console.log('sending to URL');
-			try {
-				const res = await axios(params);
+			const res = await axios(params);
 
-				console.log(JSON.stringify(res));
-
-				if (res.data?.signedUrl) {
-					const options = {
-						headers: {
-							'Content-Type': selectedFile.type,
-						},
-					};
-
-					const data = await axios
-						.put(res.data.signedUrl, selectedFile, options)
-						.catch(function (error) {
-							if (error.message || error.repsonse) {
-								console.log(error?.message || error?.response);
-								console.log(error?.response?.data);
-							}
-						});
-					console.log(data); // Log the response from the PUT request
-
-					// If you want to log the response body specifically, and it's JSON data, you can do:
-					console.log(data.data); // Log the response data
-					setIsLoading(false);
-
-					// Or if it's not JSON data and you want to log the body as a string:
-					console.log(JSON.stringify(data.data)); // Log the response data as a string
-				}
-			} catch (error) {
-				console.error(`Error:  ${JSON.stringify(error)}`);
-				setIsLoading(false);
-				didSubmit(true);
-				isSuccess(false);
-			}
+			console.log(res);
 		}
-		setIsLoading(false);
 
 		// Close the popup after the API request is handled
 		closePopup();
-		didSubmit(true);
-		isSuccess(true);
 	};
 
 	const handleInputFields = (value, id) => {
@@ -181,11 +143,7 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
 									className='btn btn-success'
 									type='button'
 									onClick={(event) => handleSubmit(event)}>
-									{isLoading ? (
-										<CircularProgress color='inherit' />
-									) : (
-										<p style={{margin: '5px'}}>Send Your Bid</p>
-									)}
+									Send Your Bid
 								</button>
 							</div>
 						</form>

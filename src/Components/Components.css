@@ -52,3 +52,30 @@
 	font-size: 16px;
 	color: #888;
 }
+
+/* CustomToast.css */
+@keyframes toast-enter {
+	from {
+		transform: translateX(150%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes toast-exit {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(150%);
+	}
+}
+
+.toast-enter {
+	animation: toast-enter 0.5s ease-in-out;
+}
+
+.toast-exit {
+	animation: toast-exit 0.5s ease-in-out;
+}

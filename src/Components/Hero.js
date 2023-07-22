@@ -6,7 +6,7 @@ import {Slider} from '@mui/material';
 import NumberSpinner from './NumberSpinner';
 import PopupForm from './PopupForm';
 
-const Hero = () => {
+const Hero = ({didSubmit, submit, isSuccess}) => {
 	const [homeSize, setHomeSize] = useState(0);
 	const [disabled, setIsDisabled] = useState(true);
 	const [previousHomeSize, setPreviousHomeSize] = useState(0);
@@ -77,7 +77,12 @@ const Hero = () => {
 					</div>
 				</div>
 			</div>
-			<PopupForm showPopup={showPopup} closePopup={closePopup} />
+			<PopupForm
+				showPopup={showPopup}
+				closePopup={closePopup}
+				didSubmit={didSubmit}
+				isSuccess={isSuccess}
+			/>
 		</div>
 	);
 };
