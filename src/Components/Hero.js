@@ -5,19 +5,43 @@ import heroImage from '../images/portraitHero.jpg';
 import {Slider} from '@mui/material';
 import NumberSpinner from './NumberSpinner';
 import PopupForm from './PopupForm';
+import {Info} from '@mui/icons-material';
 
 const Hero = ({didSubmit, submit, isSuccess}) => {
-	const [homeSize, setHomeSize] = useState(0);
+	const [savings, setSavings] = useState(0);
 	const [disabled, setIsDisabled] = useState(true);
 	const [previousHomeSize, setPreviousHomeSize] = useState(0);
 	const [showPopup, setShowPopup] = useState(false);
 
 	const handleSliderValue = (value) => {
 		console.log(value);
-		setPreviousHomeSize(homeSize);
-		setHomeSize(value);
+		setPreviousHomeSize(0);
 		setIsDisabled(false);
+
+		calculateSolarSavings(value, 0.14, 19000);
 	};
+
+	function calculateSolarSavings(monthlyElectricBill, ratePerKWh, systemCost) {
+		const monthsInYear = 12;
+		const taxCreditPercentage = 0.3;
+		const loanPeriodYears = 15;
+		const interestRate = 0.05;
+
+		const systemCostAfterTaxCredit = systemCost * (1 - taxCreditPercentage);
+
+		const loanAmount = systemCostAfterTaxCredit;
+
+		const newLoanAmountPerYear =
+			loanAmount *
+			((interestRate * Math.pow(1 + interestRate, loanPeriodYears)) /
+				(Math.pow(1 + interestRate, loanPeriodYears) - 1));
+
+		// Calculate the net annual savings with the solar system
+		const annualSavings =
+			monthlyElectricBill * monthsInYear - newLoanAmountPerYear;
+
+		setSavings(annualSavings);
+	}
 
 	const openPopup = () => {
 		console.log(true);
@@ -37,27 +61,39 @@ const Hero = ({didSubmit, submit, isSuccess}) => {
 						<h1 className='fs-1' style={{color: '#3E5C8D'}}>
 							<strong>You could save</strong>
 						</h1>
-						<p className='display-3'>
-							<strong>
-								<NumberSpinner
-									startValue={previousHomeSize}
-									endValue={homeSize}
-									isDisabled={disabled}
-									setIsDisabled={setIsDisabled}
-									setStartValue={setHomeSize}
-								/>
-							</strong>
-						</p>
+						<div className='d-flex justify-content-center'>
+							<p className='display-3 mx-2'>
+								<strong>
+									<NumberSpinner
+										startValue={previousHomeSize}
+										endValue={savings}
+										isDisabled={disabled}
+										setIsDisabled={setIsDisabled}
+										setStartValue={setSavings}
+									/>
+								</strong>
+							</p>
+							<p className='fs-1 mt-lg-4' style={{margin: '0px'}}>
+								<em>per year</em>
+							</p>
+						</div>
+
 						<Slider
 							defaultValue={70}
 							aria-label='Small'
 							valueLabelDisplay='auto'
-							min={1000}
-							max={5000}
+							min={115}
+							max={500}
 							width='50%'
 							onChangeCommitted={(event, value) => handleSliderValue(value)}
 						/>
-						<p className='fs-6'>Send your bid to see what you can save</p>
+						<div className='d-flex mb-3 justify-content-center'>
+							<Info color='disabled' fontSize='small' />
+							<p className='fs-6 mx-lg-2 mx-md-0' style={{margin: 0}}>
+								Savings price based off your average monthly electric bill
+							</p>
+						</div>
+
 						<button
 							type='button'
 							className='btn btn-primary'
@@ -78,6 +114,7 @@ const Hero = ({didSubmit, submit, isSuccess}) => {
 				</div>
 			</div>
 			<PopupForm
+				submit={submit}
 				showPopup={showPopup}
 				closePopup={closePopup}
 				didSubmit={didSubmit}

@@ -13,7 +13,12 @@ function App() {
 	return (
 		<div className='App'>
 			<Nav />
-			<Toast submit={submit} didSubmit={didSubmit} success={success} />
+			<Toast
+				submit={submit}
+				didSubmit={didSubmit}
+				success={success}
+				isSuccess={isSuccess}
+			/>
 			<Hero didSubmit={didSubmit} submit={submit} isSuccess={isSuccess} />
 			<Section />
 			<LargeCard />

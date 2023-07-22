@@ -1,80 +1,106 @@
 import React, {useState, useRef} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Components.css'; // Import a separate CSS file for styling the popup form
-import {Close} from '@mui/icons-material';
+import {Check, Close} from '@mui/icons-material';
 import axios from 'axios';
 import {CircularProgress} from '@mui/material';
 
-const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
+const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 	const inputFile = useRef(null);
+	const electricFile = useRef(null);
 	const [inputFields, setInputFields] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
+	const [bidFile, setBidFile] = useState(false);
+	const [eFileSubmit, setEfileSubmit] = useState(false);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		didSubmit(false);
+		isSuccess(false);
+
+		console.log(`here ${submit}`);
+
+		console.log(bidFile[0].name);
+
 		setIsLoading(true);
 
-		// Access the file input element using the ref
-		const selectedFile = inputFile.current.files[0];
+		const allFiles = [inputFile, electricFile || null];
 
-		// If a file is selected, you can proceed with your API request
-		if (selectedFile) {
+		allFiles.filter((n) => n);
+
+		const selectedFilesHTTP = [
+			{
+				name: bidFile[0].name || null,
+				type: bidFile[0].type || null,
+			},
+		];
+
+		if (eFileSubmit) {
+			selectedFilesHTTP.push({
+				name: eFileSubmit[0].name,
+				type: eFileSubmit[0].type,
+			});
+		}
+
+		console.log('now here');
+
+		if (bidFile[0]?.name) {
 			// Create a new FormData object to send the file
 			const data = {
 				...inputFields,
-				fileName: selectedFile.name,
-				fileType: selectedFile.type,
+				files: selectedFilesHTTP,
 			};
 
 			const params = {
 				method: 'POST',
-				url: `https://dizzcxhi23.execute-api.us-east-1.amazonaws.com/upload-file`,
+				url: `https://rvo5onzkie.execute-api.us-east-1.amazonaws.com/upload-file`,
 				headers: {},
 				data: data,
 			};
 
 			// Now you can send the formData object with the file via API
 			// For example:
-			console.log('sending to URL');
+			console.log('sending to URL ' + JSON.stringify(data));
 			try {
 				const res = await axios(params);
 
 				console.log(JSON.stringify(res));
 
-				if (res.data?.signedUrl) {
-					const options = {
-						headers: {
-							'Content-Type': selectedFile.type,
-						},
-					};
+				if (res.data?.urlData) {
+					let index = 0;
+					for (const urlData of res.data.urlData) {
+						const options = {
+							headers: {
+								'Content-Type': urlData.type,
+							},
+						};
 
-					const data = await axios
-						.put(res.data.signedUrl, selectedFile, options)
-						.catch(function (error) {
-							if (error.message || error.repsonse) {
-								console.log(error?.message || error?.response);
-								console.log(error?.response?.data);
-							}
-						});
-					console.log(data); // Log the response from the PUT request
-
-					// If you want to log the response body specifically, and it's JSON data, you can do:
-					console.log(data.data); // Log the response data
-					setIsLoading(false);
-
-					// Or if it's not JSON data and you want to log the body as a string:
-					console.log(JSON.stringify(data.data)); // Log the response data as a string
+						await axios
+							.put(urlData.signedUrl, data.files[index], options)
+							.catch(function (error) {
+								if (error.message || error.repsonse) {
+									console.log(error?.message || error?.response);
+									console.log(error?.response?.data);
+									throw error;
+								}
+							});
+						index = index + 1;
+					}
 				}
 			} catch (error) {
-				console.error(`Error:  ${JSON.stringify(error)}`);
+				console.error(
+					`We have encountered a fatal error:  ${JSON.stringify(error)}`,
+				);
 				setIsLoading(false);
 				didSubmit(true);
 				isSuccess(false);
+				closePopup();
+
+				return false;
 			}
 		}
+		console.log('successful');
 		setIsLoading(false);
-
-		// Close the popup after the API request is handled
 		closePopup();
 		didSubmit(true);
 		isSuccess(true);
@@ -84,12 +110,22 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
 		setInputFields({...inputFields, [id]: value});
 	};
 
-	const onButtonClick = () => {
-		// `current` points to the mounted file input element
-		inputFile.current.click();
-		console.log('successful');
+	const onBidClick = async () => {
+		await inputFile.current.click();
 	};
 
+	const onElectricClick = async () => {
+		await electricFile.current.click();
+	};
+
+	const onBidFileChange = (e) => {
+		/*Selected files data can be collected here.*/
+		setBidFile(e.target.files);
+	};
+
+	const onElectricFileChange = (e) => {
+		setEfileSubmit(e.target.files);
+	};
 	return (
 		<div>
 			{showPopup && (
@@ -105,77 +141,130 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess}) => {
 							Start saving today. Enter your info to get your bid reviewed by a
 							specialist immediately
 						</p>
-						<form onSubmit={handleSubmit}>
-							<div className='row'>
-								<div className='col-md-6'>
-									<div className='mb-3'>
-										<label htmlFor='firstName' className='form-label'>
-											First Name
-										</label>
-										<input
-											type='text'
-											className='form-control'
-											id='firstName'
-											onChange={(event, value) =>
-												handleInputFields(value, event.target.id)
-											}
-										/>
-									</div>
-									<div className='mb-3'>
-										<label htmlFor='phone' className='form-label'>
-											Phone Number
-										</label>
-										<input
-											type='text'
-											className='form-control'
-											id='phone'
-											onChange={(event, value) =>
-												handleInputFields(value, event.target.id)
-											}
-										/>
-									</div>
-								</div>
-								<div className='col-md-6'>
-									<div className='mb-3'>
-										<label htmlFor='lastName' className='form-label'>
-											Last Name
-										</label>
-										<input
-											type='text'
-											className='form-control'
-											id='lastName'
-											onChange={(event, value) =>
-												handleInputFields(value, event.target.id)
-											}
-										/>
-									</div>
-									<div className='mb-3'>
-										<label htmlFor='email' className='form-label'>
-											Email
-										</label>
-										<input
-											type='email'
-											className='form-control'
-											id='email'
-											onChange={(event, value) =>
-												handleInputFields(value, event.target.id)
-											}
-										/>
-									</div>
-								</div>
+						<form onSubmit={handleSubmit} className='row g-3'>
+							<div className='mb-3 col-6'>
+								<label htmlFor='firstName' className='form-label'>
+									First Name*
+								</label>
+								<input
+									type='text'
+									className='form-control'
+									id='firstName'
+									onChange={(event, value) =>
+										handleInputFields(value, event.target.id)
+									}
+								/>
+							</div>
+							<div className='mb-3 col-6'>
+								<label htmlFor='lastName' className='form-label'>
+									Last Name*
+								</label>
+								<input
+									type='text col-6'
+									className='form-control'
+									id='lastName'
+									onChange={(event, value) =>
+										handleInputFields(value, event.target.id)
+									}
+								/>
+							</div>
+							<div className='mb-3 col-6'>
+								<label htmlFor='phone' className='form-label'>
+									Phone Number
+								</label>
+								<input
+									type='text'
+									className='form-control'
+									id='phone'
+									onChange={(event, value) =>
+										handleInputFields(value, event.target.id)
+									}
+								/>
+							</div>
+
+							<div className='mb-3 col-6'>
+								<label htmlFor='email' className='form-label'>
+									Email*
+								</label>
+								<input
+									type='email'
+									className='form-control'
+									id='email'
+									onChange={(event, value) =>
+										handleInputFields(value, event.target.id)
+									}
+								/>
+							</div>
+							<div className='mb-3 col-12'>
+								<label htmlFor='email' className='form-label'>
+									Electricity Cost (per month)
+								</label>
+								<input
+									type='email'
+									className='form-control'
+									id='email'
+									onChange={(event, value) =>
+										handleInputFields(value, event.target.id)
+									}
+								/>
 							</div>
 							<input
 								type='file'
 								id='bidFile'
 								ref={inputFile}
 								style={{display: 'none'}}
+								onChange={onBidFileChange}
 							/>
-							<button
-								type='button'
-								className='btn btn-primary mb-5 d-flex'
-								onClick={onButtonClick}>
-								<p style={{margin: 0}}>Select File</p>
-							</button>
+							<input
+								type='file'
+								id='electricFile'
+								ref={electricFile}
+								onChange={onElectricFileChange}
+								style={{display: 'none'}}
+							/>
+							<div className='d-flex g-2 justify-content-center'>
+								<div className='d-flex flex-column align-items-center mx-3'>
+									<label className='text-start'>Current Bid*</label>
+									{!bidFile ? (
+										<button
+											type='button'
+											className='btn btn-primary mb-3 d-flex'
+											onClick={(event) => onBidClick(event.target.id)}>
+											<p style={{margin: 0}}>Select File</p>
+										</button>
+									) : (
+										<button
+											type='button'
+											className='btn btn-disabled-success mb-3 d-flex'
+											disabled>
+											<Check color='success' />
+										</button>
+									)}
+								</div>
+								<div className='d-flex flex-column align-items-center mx-3'>
+									<label className='text-start'>Electric Bill</label>
+									{!eFileSubmit ? (
+										<button
+											type='button'
+											className='btn btn-primary mb-3 d-flex'
+											onClick={(event) => onElectricClick(event.target.id)}>
+											<p style={{margin: 0}}>Select File</p>
+										</button>
+									) : (
+										<button
+											type='button'
+											className='btn btn-disabled-success mb-3 d-flex'
+											disabled>
+											<Check color='success' />
+										</button>
+									)}
+								</div>
+							</div>
+							<p className='mb-4'>
+								For most accurate results provide a monthly statement of your
+								electric bill
+							</p>
+
 							<div className='d-grid gap-2'>
 								<button
 									className='btn btn-success'
