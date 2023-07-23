@@ -11,7 +11,6 @@ const CustomToast = ({submit, didSubmit, success, isSuccess}) => {
 
 	useEffect(() => {
 		if (submit) {
-			console.log(`submitted here ${success}`);
 			if (success) {
 				setMessage(
 					'Watch your email or your phone number for further updates on your bid review status',

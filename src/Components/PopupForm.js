@@ -42,8 +42,6 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 			});
 		}
 
-		console.log('now here');
-
 		if (bidFile[0]?.name) {
 			// Create a new FormData object to send the file
 			const data = {
@@ -60,11 +58,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 
 			// Now you can send the formData object with the file via API
 			// For example:
-			console.log('sending to URL ' + JSON.stringify(data));
 			try {
 				const res = await axios(params);
-
-				console.log(JSON.stringify(res));
 
 				if (res.data?.urlData) {
 					let index = 0;
@@ -261,8 +256,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 								</div>
 							</div>
 							<p className='mb-4'>
-								For most accurate results provide a monthly statement of your
-								electric bill
+								While optional, for most accurate results, provide a monthly
+								statement of your electric bill
 							</p>
 
 							<div className='d-grid gap-2'>

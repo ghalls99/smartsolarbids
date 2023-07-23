@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Components.css';
 import heroImage from '../images/portraitHero.jpg';
@@ -10,18 +10,17 @@ import {Info} from '@mui/icons-material';
 const Hero = ({didSubmit, submit, isSuccess}) => {
 	const [savings, setSavings] = useState(0);
 	const [disabled, setIsDisabled] = useState(true);
-	const [previousHomeSize, setPreviousHomeSize] = useState(0);
+	const [previousHomeSize, setPreviousHomeSize] = useState(99);
 	const [showPopup, setShowPopup] = useState(false);
 
 	const handleSliderValue = (value) => {
-		console.log(value);
 		setPreviousHomeSize(0);
 		setIsDisabled(false);
 
-		calculateSolarSavings(value, 0.14, 19000);
+		calculateSolarSavings(value, 19000);
 	};
 
-	function calculateSolarSavings(monthlyElectricBill, ratePerKWh, systemCost) {
+	function calculateSolarSavings(monthlyElectricBill, systemCost) {
 		const monthsInYear = 12;
 		const taxCreditPercentage = 0.3;
 		const loanPeriodYears = 15;
@@ -41,10 +40,11 @@ const Hero = ({didSubmit, submit, isSuccess}) => {
 			monthlyElectricBill * monthsInYear - newLoanAmountPerYear;
 
 		setSavings(annualSavings);
+
+		return annualSavings;
 	}
 
 	const openPopup = () => {
-		console.log(true);
 		setShowPopup(true);
 	};
 
