@@ -51,7 +51,7 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 
 			const params = {
 				method: 'POST',
-				url: `https://rvo5onzkie.execute-api.us-east-1.amazonaws.com/upload-file`,
+				url: `https://s7o03t61l7.execute-api.us-east-1.amazonaws.com/upload-file`,
 				headers: {},
 				data: data,
 			};

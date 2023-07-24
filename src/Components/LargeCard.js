@@ -15,7 +15,9 @@ const LargeCard = () => {
 							specifically to you, and to your home.
 						</p>
 						<button className='btn btn-primary d-flex justify-content-start'>
-							Take the Quiz
+							<a href='/quiz' style={{color: 'white', textDecoration: 'none'}}>
+								Take the Quiz
+							</a>
 						</button>
 					</div>
 				</div>

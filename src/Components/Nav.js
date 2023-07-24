@@ -1,59 +1,47 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import logo from '../images/logo.png';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
-	const [scrolled, setScrolled] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	useEffect(() => {
-		const handleScroll = () => {
-			if (window.pageYOffset > 50) {
-				if (!scrolled) {
-					setScrolled(true);
-				}
-			} else {
-				if (scrolled) {
-					setScrolled(false);
-				}
-			}
-		};
-
-		window.addEventListener('scroll', handleScroll);
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, [scrolled]);
+	const handleMenuToggle = () => {
+		setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
+	};
 
 	return (
-		<nav
-			className={`navbar navbar-expand-md navbar-light sticky-top${
-				scrolled ? ' scrolled' : ''
-			} bg-white shadow-sm`}>
+		<nav className='navbar navbar-expand-md navbar-light bg-light sticky-top'>
 			<div className='container'>
-				<a className='navbar-brand' href='#'>
-					<img src={logo} alt='Logo' className='logo' width={50} />
-				</a>
+				<Link className='navbar-brand' to='/'>
+					{/* Use Link instead of anchor tag for internal navigation */}
+					<img src={logo} alt='Logo' width={50} />
+				</Link>
 				<button
-					className='navbar-toggler'
+					className={`navbar-toggler${isMenuOpen ? ' collapsed' : ''}`}
 					type='button'
-					data-toggle='collapse'
-					data-target='#navbarNav'
 					aria-controls='navbarNav'
-					aria-expanded='false'
-					aria-label='Toggle navigation'>
+					aria-expanded={isMenuOpen ? 'true' : 'false'}
+					aria-label='Toggle navigation'
+					onClick={handleMenuToggle}>
 					<span className='navbar-toggler-icon'></span>
 				</button>
 				<div
-					className='collapse navbar-collapse justify-content-end align-items-center'
+					className={`collapse navbar-collapse justify-content-end ${
+						isMenuOpen ? 'show' : ''
+					}`} // Add space between class names
 					id='navbarNav'>
 					<ul className='navbar-nav'>
-						<li className='nav-item p-4'>
-							<a className='nav-link' href='#'>
+						<li className='nav-item mt-lg-2'>
+							{/* Use Link instead of anchor tag for internal navigation */}
+							<Link className='nav-link' to='/'>
 								Home
-							</a>
+							</Link>
 						</li>
-						<li className='nav-item p-4'>
-							<button className='btn btn-primary'>Get a Bid</button>
+						<li className='nav-item m-2'>
+							{/* Use Link instead of anchor tag for internal navigation */}
+							<Link to='/quiz'>
+								<button className='btn btn-primary'>Get a bid</button>
+							</Link>
 						</li>
 					</ul>
 				</div>
