@@ -10,7 +10,7 @@ import {Info} from '@mui/icons-material';
 const Hero = ({didSubmit, submit, isSuccess}) => {
 	const [savings, setSavings] = useState(0);
 	const [disabled, setIsDisabled] = useState(true);
-	const [previousHomeSize, setPreviousHomeSize] = useState(99);
+	const [previousHomeSize, setPreviousHomeSize] = useState(99 + 1500);
 	const [showPopup, setShowPopup] = useState(false);
 
 	const handleSliderValue = (value) => {
@@ -39,9 +39,7 @@ const Hero = ({didSubmit, submit, isSuccess}) => {
 		const annualSavings =
 			monthlyElectricBill * monthsInYear - newLoanAmountPerYear;
 
-		setSavings(annualSavings);
-
-		return annualSavings;
+		setSavings(annualSavings + 1500);
 	}
 
 	const openPopup = () => {
@@ -74,7 +72,7 @@ const Hero = ({didSubmit, submit, isSuccess}) => {
 								</strong>
 							</p>
 							<p className='fs-1 mt-lg-4' style={{margin: '0px'}}>
-								<em>per year</em>
+								<em>on your bid</em>
 							</p>
 						</div>
 

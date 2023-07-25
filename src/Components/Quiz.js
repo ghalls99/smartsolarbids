@@ -16,11 +16,6 @@ const questions = [
 		required: true,
 	},
 	{
-		id: 'homeSize',
-		questionText: 'What is the square footage of your home?',
-		required: true,
-	},
-	{
 		id: 'utilityProvider',
 		questionText: 'Who is your utility provider?',
 	},
