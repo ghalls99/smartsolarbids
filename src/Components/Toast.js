@@ -15,7 +15,7 @@ const CustomToast = ({submit, didSubmit, success, isSuccess}) => {
 				setMessage(
 					'Watch your email or your phone number for further updates on your bid review status',
 				);
-				setheaderText('Error');
+				setheaderText('Success');
 			} else {
 				setMessage('Unable to upload bid. Please try again later.');
 				setheaderText('Error');
