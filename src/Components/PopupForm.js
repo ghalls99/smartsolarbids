@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Components.css'; // Import a separate CSS file for styling the popup form
 import {Check, Close} from '@mui/icons-material';
@@ -12,13 +12,20 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [bidFile, setBidFile] = useState(false);
 	const [eFileSubmit, setEfileSubmit] = useState(false);
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const [submitPress, setSubmitPress] = useState(false);
 
+	useEffect(() => {
+		if (submitPress) {
+			handleSubmit();
+		}
+	}, [submitPress]);
+
+	const didSubmitPress = () => {
+		setSubmitPress(true);
+	};
+	const handleSubmit = async () => {
 		didSubmit(false);
 		isSuccess(false);
-
-		console.log(`here ${submit}`);
 
 		console.log(bidFile[0].name);
 
@@ -45,8 +52,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 		if (bidFile[0]?.name) {
 			// Create a new FormData object to send the file
 			const data = {
-				...inputFields,
 				files: selectedFilesHTTP,
+				...inputFields,
 			};
 
 			const params = {
@@ -101,10 +108,11 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 		isSuccess(true);
 	};
 
-	const handleInputFields = (value, id) => {
+	const handleInputFields = (event) => {
+		const {id, value} = event.target;
+
 		setInputFields({...inputFields, [id]: value});
 	};
-
 	const onBidClick = async () => {
 		await inputFile.current.click();
 	};
@@ -145,9 +153,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 									type='text'
 									className='form-control'
 									id='firstName'
-									onChange={(event, value) =>
-										handleInputFields(value, event.target.id)
-									}
+									autoComplete='new-password'
+									onChange={(event) => handleInputFields(event)}
 								/>
 							</div>
 							<div className='mb-3 col-6'>
@@ -158,9 +165,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 									type='text col-6'
 									className='form-control'
 									id='lastName'
-									onChange={(event, value) =>
-										handleInputFields(value, event.target.id)
-									}
+									autoComplete='new-password'
+									onChange={(event) => handleInputFields(event)}
 								/>
 							</div>
 							<div className='mb-3 col-6'>
@@ -171,9 +177,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 									type='text'
 									className='form-control'
 									id='phone'
-									onChange={(event, value) =>
-										handleInputFields(value, event.target.id)
-									}
+									autoComplete='new-password'
+									onChange={(event) => handleInputFields(event)}
 								/>
 							</div>
 
@@ -185,9 +190,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 									type='email'
 									className='form-control'
 									id='email'
-									onChange={(event, value) =>
-										handleInputFields(value, event.target.id)
-									}
+									autoComplete='new-password'
+									onChange={(event) => handleInputFields(event)}
 								/>
 							</div>
 							<div className='mb-3 col-12'>
@@ -198,9 +202,8 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 									type='email'
 									className='form-control'
 									id='email'
-									onChange={(event, value) =>
-										handleInputFields(value, event.target.id)
-									}
+									autoComplete='new-password'
+									onChange={(event) => handleInputFields(event)}
 								/>
 							</div>
 							<input
@@ -264,7 +267,7 @@ const PopupForm = ({showPopup, closePopup, didSubmit, isSuccess, submit}) => {
 								<button
 									className='btn btn-success'
 									type='button'
-									onClick={(event) => handleSubmit(event)}>
+									onClick={(event) => didSubmitPress(event)}>
 									{isLoading ? (
 										<CircularProgress color='inherit' />
 									) : (
